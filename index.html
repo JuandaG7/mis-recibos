@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Mis Recibos</title>
+  <meta name="description" content="Guarda y encuentra tus recibos y comprobantes de pago.">
+  <meta name="theme-color" content="#F3FAFA" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0D1718" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Recibos">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <main id="view" class="app" aria-live="polite"></main>
+
+  <nav id="capture-bar" class="capture-bar" hidden>
+    <button class="btn btn-primary capture-main" data-action="capture-camera">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.6l1.2-1.8A1.5 1.5 0 0 1 10.5 3.5h3a1.5 1.5 0 0 1 1.2.7L15.9 6h1.6A2.5 2.5 0 0 1 20 8.5v8a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 16.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="12.5" r="3.4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+      Tomar foto
+    </button>
+    <button class="btn btn-secondary capture-alt" data-action="capture-photos">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="10" r="1.8" fill="currentColor"/><path d="M4 17l5-4.5 3.5 3 3-2.5L20 17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      Fotos o PDF
+    </button>
+  </nav>
+
+  <input id="camera-input" class="visually-hidden" type="file" accept="image/*" capture="environment" tabindex="-1" aria-hidden="true">
+  <input id="photos-input" class="visually-hidden" type="file" accept="image/*,application/pdf,.pdf" tabindex="-1" aria-hidden="true">
+  <input id="restore-input" class="visually-hidden" type="file" accept=".zip,application/zip" multiple tabindex="-1" aria-hidden="true">
+
+  <div id="editor-root" class="overlay" hidden></div>
+  <div id="viewer-root" class="overlay viewer" hidden></div>
+  <div id="welcome-root" class="overlay" hidden></div>
+  <div id="modal-root"></div>
+  <div id="toast" class="toast" role="status" hidden></div>
+
+  <script type="module" src="js/app.js"></script>
+  <script>
+    // Seguro: si la app no arranca (por ejemplo, justo después de una actualización
+    // quedó una mezcla de archivos viejos y nuevos), ofrecer recargar limpio.
+    // Los recibos no se tocan: solo se borran los archivos de la app guardados.
+    setTimeout(function () {
+      var view = document.getElementById('view');
+      if (view && !view.children.length) {
+        view.innerHTML = '<div class="empty" style="margin-top:30vh"><p class="empty-title">La app no abrió bien</p>'
+          + '<p class="empty-text">Tus recibos están a salvo. Toca el botón para volver a cargarla.</p>'
+          + '<button class="btn btn-primary btn-block" id="hard-reload" style="margin-top:16px">Volver a cargar</button></div>';
+        document.getElementById('hard-reload').onclick = function () {
+          var clear = window.caches ? caches.keys().then(function (k) { return Promise.all(k.map(function (n) { return caches.delete(n); })); }) : Promise.resolve();
+          clear.then(function () { location.reload(); });
+        };
+      }
+    }, 6000);
+  </script>
+</body>
+</html>

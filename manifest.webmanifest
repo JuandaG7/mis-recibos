@@ -1,0 +1,17 @@
+{
+  "name": "Mis Recibos",
+  "short_name": "Recibos",
+  "description": "Guarda y encuentra tus recibos y comprobantes de pago.",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F3FAFA",
+  "theme_color": "#F3FAFA",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
